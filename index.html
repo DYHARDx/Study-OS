@@ -1,16 +1,705 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Never</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyOS – Study Management</title>
+  <meta name="description" content="Premium study management dashboard for Web Dev and NIMCET preparation.">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <!-- Font Awesome for emoji-style subject icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <h1>Nhi Bataunga</h1>
-</body>
 
+<!-- Sidebar Backdrop (mobile) -->
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+<div id="app-container">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-text">StudyOS</div>
+        <div class="sidebar-logo-sub">Your Learning Partner</div>
+      </div>
+    </div>
+
+    <span class="sidebar-section-label">Main</span>
+    <ul class="nav-list">
+      <li class="nav-item active" data-view="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        Dashboard
+      </li>
+      <li class="nav-item" data-view="checkin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Daily Check-in
+      </li>
+      <li class="nav-item" data-view="planner">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+        Daily Planner
+      </li>
+      <li class="nav-item" data-view="webdev">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Web Development
+      </li>
+      <li class="nav-item" data-view="nimcet">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+        NIMCET Prep
+      </li>
+      <li class="nav-item" data-view="analytics">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+        Analytics
+      </li>
+
+      <li class="nav-item" data-view="settings">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Settings
+      </li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Quick Add -->
+    <div class="quick-add">
+      <div class="quick-add-label">Quick Add Time</div>
+      <div class="quick-add-grid">
+        <button class="quick-add-btn" onclick="quickAdd('webdev')" id="qa-webdev">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#5B5FC7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Web Dev
+        </button>
+        <button class="quick-add-btn" onclick="quickAdd('maths')" id="qa-maths">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg>
+          Maths
+        </button>
+        <button class="quick-add-btn" onclick="quickAdd('reasoning')" id="qa-reasoning">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Reasoning
+        </button>
+        <button class="quick-add-btn" onclick="quickAdd('computer')" id="qa-computer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+          Computer
+        </button>
+        <button class="quick-add-btn" onclick="quickAdd('english')" id="qa-english">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+          English
+        </button>
+        <button class="quick-add-btn" onclick="quickAdd('revision')" id="qa-revision">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Revision
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-card">
+        <div class="avatar" id="user-avatar">AS</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Amu Jii</div>
+          <div class="sidebar-user-sub">Stay Consistent 💪</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN WRAPPER ===================== -->
+  <div class="main-wrapper">
+
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="icon-btn menu-toggle" id="menu-toggle">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+        <div>
+          <div class="header-greeting" id="header-greeting">Good Morning, Amu! 👋</div>
+          <div class="header-sub" id="header-sub">Loading...</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-primary btn-sm" onclick="switchView('checkin')" style="padding: 6px 12px; border-radius: 99px; display: flex; align-items: center; gap: 6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Check-in
+        </button>
+        <div class="streak-pill">
+          🔥 <span id="header-streak">0</span> Day Streak
+        </div>
+        <button class="icon-btn" id="theme-toggle" title="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="theme-icon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content" id="page-content">
+
+      <!-- =================== DASHBOARD VIEW =================== -->
+      <div class="view active" id="view-dashboard">
+
+        <!-- Internship Banner (shown on weekends) -->
+        <div class="internship-banner" id="internship-banner" style="display:none;">
+          <div class="internship-banner-icon">🧑‍💻</div>
+          <div class="internship-banner-text">
+            <strong>Internship Day</strong>
+            <span>Study targets reduced. Available study time: 5 hours</span>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-icon indigo">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="stat-card-label">Today's Study Time</div>
+            <div class="stat-card-value" id="stat-today-hours">0h 0m</div>
+            <div class="stat-card-sub" id="stat-today-goal">Goal: 0h 0m</div>
+            <div class="stat-progress-wrap" style="margin-top:10px;">
+              <div class="stat-progress-fill" id="stat-today-bar" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon green">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stat-card-label">Remaining Hours</div>
+            <div class="stat-card-value" id="stat-remaining">0h 0m</div>
+            <div class="stat-card-sub" id="stat-remaining-sub">Daily goal remaining</div>
+            <div class="stat-progress-wrap" style="margin-top:10px;">
+              <div class="stat-progress-fill green" id="stat-remaining-bar" style="width:100%"></div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon amber">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+            </div>
+            <div class="stat-card-label">Overall Progress</div>
+            <div class="stat-card-value" id="stat-overall-pct">0%</div>
+            <div class="stat-card-sub" id="stat-tasks-done">0 / 0 Tasks Done</div>
+          </div>
+
+
+
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid-dashboard">
+
+          <!-- Left Column: Today's Plan -->
+          <div class="dashboard-col-left" style="display:flex; flex-direction:column; gap:14px;">
+            <div class="section-hdr" style="margin-bottom:0;">
+              <div class="section-hdr-left">
+                <div class="section-hdr-icon" style="background:var(--color-primary-lt); color:var(--color-primary);">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+                </div>
+                <div>
+                  <div class="section-hdr-title">Today's Plan</div>
+                </div>
+              </div>
+              <button class="link-btn" onclick="switchView('planner')">
+                View All
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+
+            <div id="today-plan-list" style="display:flex; flex-direction:column; gap:8px;">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+
+          <!-- Right Column: Progress, Stats, Checkin -->
+          <div class="dashboard-col-right" style="display:flex; flex-direction:column; gap:14px;">
+
+            <!-- Progress Overview Chart -->
+            <div class="card" style="padding:18px;">
+              <div class="section-hdr" style="margin-bottom:14px;">
+                <div class="section-hdr-left">
+                  <div class="section-hdr-icon" style="background:var(--color-blue-lt); color:var(--color-blue);">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  </div>
+                  <div class="section-hdr-title">Progress Overview (24 Hours)</div>
+                </div>
+              </div>
+              <div class="chart-box" style="height:200px;"><canvas id="weeklyChart"></canvas></div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px;">
+                <div class="metric-pill">
+                  <div class="metric-pill-dot" style="background:#5B5FC7;"></div>
+                  <div><div class="metric-pill-label">Target</div><div class="metric-pill-val" id="chart-target">0h</div></div>
+                </div>
+                <div class="metric-pill">
+                  <div class="metric-pill-dot" style="background:#F59E0B;"></div>
+                  <div><div class="metric-pill-label">Actual</div><div class="metric-pill-val" id="chart-actual">0h</div></div>
+                </div>
+                <div class="metric-pill">
+                  <div class="metric-pill-dot" style="background:#10B981;"></div>
+                  <div><div class="metric-pill-label">Completion</div><div class="metric-pill-val" id="chart-completion">0%</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subject Progress -->
+            <div class="card" style="padding:18px;">
+              <div class="section-hdr" style="margin-bottom:14px;">
+                <div class="section-hdr-left">
+                  <div class="section-hdr-icon" style="background:var(--color-purple-lt); color:var(--color-purple);">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                  </div>
+                  <div class="section-hdr-title">Subject Progress</div>
+                </div>
+              </div>
+              <div class="chart-box" style="height:160px;"><canvas id="distributionChart"></canvas></div>
+              <div style="margin-top:16px;" id="subject-progress-list">
+                <!-- Generated by JS -->
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <!-- Bottom Row -->
+        <div class="grid-2col">
+          <!-- Upcoming Web Dev Topics -->
+          <div class="card">
+            <div class="section-hdr">
+              <div class="section-hdr-left">
+                <div class="section-hdr-icon" style="background:var(--color-primary-lt); color:var(--color-primary);">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <div class="section-hdr-title">Upcoming Web Dev Topics</div>
+              </div>
+              <button class="link-btn" onclick="switchView('webdev')">
+                View All
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+            <div id="upcoming-webdev-list"></div>
+          </div>
+
+          <!-- NIMCET Chapters -->
+          <div class="card">
+            <div class="section-hdr">
+              <div class="section-hdr-left">
+                <div class="section-hdr-icon" style="background:var(--color-green-lt); color:var(--color-green);">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </div>
+                <div class="section-hdr-title">NIMCET Chapters</div>
+              </div>
+              <button class="link-btn" onclick="switchView('nimcet')">
+                View All
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+            <div id="upcoming-nimcet-list"></div>
+          </div>
+        </div>
+
+        <!-- Quote -->
+        <div class="card" style="display:flex; align-items:center; gap:24px; padding:20px 24px;">
+          <div style="font-size:2.5rem;">🏆</div>
+          <div style="flex:1;">
+            <div style="font-size:0.95rem; font-weight:700; color:var(--color-text-1);" id="quote-main">Consistency is the key to success.</div>
+            <div style="font-size:0.8rem; color:var(--color-text-3); margin-top:4px;" id="quote-sub">Keep going, your future self is proud of you! 💪</div>
+          </div>
+          <div style="font-size:0.875rem; font-style:italic; color:var(--color-text-3); max-width:240px; text-align:right;" id="quote-secondary">—</div>
+        </div>
+
+      </div>
+
+      <!-- =================== CHECK-IN VIEW =================== -->
+      <div class="view" id="view-checkin">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-size:1.25rem; font-weight:800;">Daily Check-in</div>
+            <div style="font-size:0.8rem; color:var(--color-text-3); margin-top:2px;">Track your mood, sleep, and habits every day</div>
+          </div>
+          <button class="btn btn-primary btn-md" id="new-checkin-btn" style="display:none;" onclick="showCheckinForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            + New Check-in
+          </button>
+        </div>
+
+        <!-- Today's Form Card -->
+        <div class="card" id="checkin-page-form" style="padding:24px;">
+          <div style="font-weight:700; font-size:0.95rem; margin-bottom:16px; color:var(--color-text-1);">📋 Today's Entry</div>
+
+          <div class="grid-2col" style="gap:16px; margin-bottom:16px;">
+            <div>
+              <div class="form-label" style="margin-bottom:8px;">How are you feeling?</div>
+              <div style="display:flex; gap:8px;">
+                <span class="checkin-emoji" data-mood2="1" style="font-size:1.5rem;">😞</span>
+                <span class="checkin-emoji" data-mood2="2" style="font-size:1.5rem;">😕</span>
+                <span class="checkin-emoji" data-mood2="3" style="font-size:1.5rem;">😐</span>
+                <span class="checkin-emoji selected" data-mood2="4" style="font-size:1.5rem;">🙂</span>
+                <span class="checkin-emoji" data-mood2="5" style="font-size:1.5rem;">😁</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sleep (Hours)</label>
+              <input type="number" id="ci-sleep" class="form-input" step="0.5" min="0" max="24" value="7">
+            </div>
+          </div>
+
+          <div class="grid-2col" style="gap:16px; margin-bottom:16px;">
+            <div class="form-group">
+              <label class="form-label">Water (Glasses)</label>
+              <input type="number" id="ci-water" class="form-input" min="0" max="20" value="3">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Today's Win 🏆</label>
+              <input type="text" id="ci-win" class="form-input" placeholder="What went well?">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Notes / Problem faced</label>
+            <input type="text" id="ci-note" class="form-input" placeholder="Anything to remember...">
+          </div>
+
+          <button class="btn btn-primary btn-md" onclick="saveCheckinPage()">Save Today's Check-in</button>
+        </div>
+
+        <!-- Already done today banner -->
+        <div id="checkin-page-done" style="display:none;">
+          <div class="internship-banner" style="background:var(--color-green-lt); border-color:var(--color-green-md); margin-bottom:4px;">
+            <div style="font-size:1.5rem;">✅</div>
+            <div>
+              <strong style="color:var(--color-green); display:block;">Already checked in today!</strong>
+              <span style="font-size:0.78rem; color:var(--color-text-2);">Come back tomorrow for your next check-in.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div>
+          <div style="font-size:0.8rem; font-weight:700; color:var(--color-text-3); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px;">Past Entries</div>
+          <div id="checkin-history-list" style="display:flex; flex-direction:column; gap:10px;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =================== DAILY PLANNER VIEW =================== -->
+      <div class="view" id="view-planner">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:1.25rem; font-weight:800; color:var(--color-text-1);">Daily Planner</div>
+            <div style="font-size:0.8rem; color:var(--color-text-3); margin-top:2px;" id="planner-date-sub">Today's tasks, prioritized for you</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <div class="streak-pill" id="planner-internship-tag" style="display:none;">🧑‍💻 Internship Day</div>
+          </div>
+        </div>
+
+        <div id="planner-task-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+      </div>
+
+      <!-- =================== WEB DEV VIEW =================== -->
+      <div class="view" id="view-webdev">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-size:1.25rem; font-weight:800;">Full Stack Web Development</div>
+            <div style="font-size:0.8rem; color:var(--color-text-3); margin-top:2px;">Daily Target: <span id="wd-daily-target">3h</span> &bull; Completed Today: <span id="wd-today-done">0h 0m</span></div>
+          </div>
+          <div style="position:relative;">
+            <svg style="position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; color:var(--color-text-3); pointer-events:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="search-webdev" class="form-input" placeholder="Search chapters..." style="padding-left:32px; width:200px;">
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="card" style="padding:16px 20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:0.825rem; font-weight:600; color:var(--color-text-2);">Course Progress</span>
+            <span style="font-size:0.825rem; font-weight:800; color:var(--color-primary);" id="wd-progress-pct">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill indigo" id="wd-progress-bar" style="width:0%"></div></div>
+          <div style="font-size:0.72rem; color:var(--color-text-3); margin-top:6px;" id="wd-progress-sub">0 / 69 chapters completed</div>
+        </div>
+
+        <div id="webdev-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- =================== NIMCET VIEW =================== -->
+      <div class="view" id="view-nimcet">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-size:1.25rem; font-weight:800;">NIMCET Preparation</div>
+            <div style="font-size:0.8rem; color:var(--color-text-3); margin-top:2px;">Completed Today: <span id="nimcet-today-done">0h 0m</span></div>
+          </div>
+          <div style="position:relative;">
+            <svg style="position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; color:var(--color-text-3); pointer-events:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="search-nimcet" class="form-input" placeholder="Search topics..." style="padding-left:32px; width:200px;">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:6px; flex-wrap:wrap;" id="nimcet-tabs">
+          <button class="btn btn-sm btn-primary" data-cat="maths">Maths</button>
+          <button class="btn btn-sm btn-ghost" data-cat="reasoning">Reasoning</button>
+          <button class="btn btn-sm btn-ghost" data-cat="computer">Computer</button>
+          <button class="btn btn-sm btn-ghost" data-cat="english">English</button>
+          <button class="btn btn-sm btn-ghost" data-cat="revision">Revision</button>
+        </div>
+
+        <div class="card" style="padding:16px 20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:0.825rem; font-weight:600; color:var(--color-text-2);" id="nimcet-section-label">Maths Progress</span>
+            <span style="font-size:0.825rem; font-weight:800; color:var(--color-green);" id="nimcet-section-pct">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill green" id="nimcet-section-bar" style="width:0%"></div></div>
+          <div style="font-size:0.72rem; color:var(--color-text-3); margin-top:6px;" id="nimcet-section-sub">Daily target: 0h</div>
+        </div>
+
+        <div id="nimcet-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- =================== ANALYTICS VIEW =================== -->
+      <div class="view" id="view-analytics">
+        <div style="font-size:1.25rem; font-weight:800;">Analytics</div>
+
+        <div class="stats-row" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card">
+            <div class="stat-card-label">Longest Streak</div>
+            <div class="stat-card-value" id="an-longest-streak">0</div>
+            <div class="stat-card-sub">Days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Total Hours</div>
+            <div class="stat-card-value" id="an-total-hours">0</div>
+            <div class="stat-card-sub">Hours studied</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Missed Days</div>
+            <div class="stat-card-value" id="an-missed">0</div>
+            <div class="stat-card-sub">Days</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Est. Completion</div>
+            <div class="stat-card-value" style="font-size:1rem;" id="an-eta">—</div>
+            <div class="stat-card-sub" id="an-eta-sub"></div>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="card">
+            <div class="section-hdr">
+              <div class="section-hdr-title" id="an-chart-label">Study Hours – Last 7 Days</div>
+              <select class="period-select" id="an-chart-period">
+                <option value="1">Last 24 Hours</option>
+                <option value="7" selected>Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="60">Last 60 Days</option>
+                <option value="90">Last 90 Days</option>
+              </select>
+            </div>
+            <div class="chart-box"><canvas id="an-weeklyChart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="section-hdr-title" style="margin-bottom:14px;">Subject Distribution</div>
+            <div class="chart-box"><canvas id="an-distChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================== CHECK-IN VIEW =================== -->
+      <div class="view" id="view-checkin">
+        <div style="font-size:1.25rem; font-weight:800; margin-bottom: 24px;">Daily Check-in</div>
+        <div class="grid-dashboard">
+          
+          <!-- Left Col: Form -->
+          <div class="dashboard-col-left" style="display:flex; flex-direction:column; gap:16px;">
+            <div class="card" id="checkin-page-form">
+              <div class="section-hdr" style="margin-bottom:16px;">
+                <div class="section-hdr-left">
+                  <div class="section-hdr-icon" style="background:var(--color-teal-lt); color:var(--color-teal);">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  </div>
+                  <div class="section-hdr-title">How was your day?</div>
+                </div>
+              </div>
+
+              <div class="checkin-row">
+                <div class="checkin-label">Mood</div>
+                <div class="checkin-emoji-row">
+                  <span class="checkin-emoji" data-mood2="1">😞</span>
+                  <span class="checkin-emoji" data-mood2="2">😕</span>
+                  <span class="checkin-emoji" data-mood2="3">😐</span>
+                  <span class="checkin-emoji selected" data-mood2="4">🙂</span>
+                  <span class="checkin-emoji" data-mood2="5">😁</span>
+                </div>
+              </div>
+
+              <div class="checkin-row">
+                <div class="checkin-label">Sleep (Hours)</div>
+                <input type="number" id="ci-sleep" class="form-input" style="width:100px;" value="7.0" step="0.5">
+              </div>
+
+              <div class="checkin-row">
+                <div class="checkin-label">Water (Glasses)</div>
+                <input type="number" id="ci-water" class="form-input" style="width:100px;" value="3" step="1">
+              </div>
+
+              <div class="checkin-row">
+                <div class="checkin-label">Today's Win 🏆</div>
+                <input type="text" id="ci-win" class="form-input" placeholder="What went well today?">
+              </div>
+
+              <div class="checkin-row" style="border-bottom:none;">
+                <div class="checkin-label">Notes / Journal</div>
+                <textarea id="ci-note" class="form-input" style="min-height:80px; resize:vertical;" placeholder="Write about your day..."></textarea>
+              </div>
+
+              <button class="btn btn-primary btn-md btn-full" style="margin-top:16px;" onclick="saveCheckinPage()">
+                Save Check-in
+              </button>
+            </div>
+
+            <!-- Done State -->
+            <div class="card" id="checkin-page-done" style="display:none; text-align:center; padding: 40px 20px;">
+              <div style="font-size:3rem; margin-bottom:16px;">✅</div>
+              <div style="font-size:1.2rem; font-weight:800; color:var(--color-text-1);">You've already checked in today!</div>
+              <div style="color:var(--color-text-3); font-size:0.9rem; margin-top:8px;">Great job staying consistent.</div>
+            </div>
+          </div>
+
+          <!-- Right Col: History -->
+          <div class="dashboard-col-right">
+            <div style="font-size:1rem; font-weight:800; margin-bottom:16px; color:var(--color-text-2);">Past Entries</div>
+            <div id="checkin-history-list" style="display:flex; flex-direction:column; gap:12px;">
+              <!-- JS rendered -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================== SETTINGS VIEW =================== -->
+      <div class="view" id="view-settings">
+        <div style="font-size:1.25rem; font-weight:800;">Settings</div>
+
+        <div class="grid-2col">
+          <div class="card">
+            <div class="settings-section-title">Daily Targets (Hours)</div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">Web Dev</label>
+              <input type="number" id="s-webdev" class="form-input" step="0.5" value="3">
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">NIMCET Maths</label>
+              <input type="number" id="s-maths" class="form-input" step="0.5" value="4">
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">NIMCET Reasoning</label>
+              <input type="number" id="s-reasoning" class="form-input" step="0.5" value="1.5">
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label">NIMCET Computer</label>
+              <input type="number" id="s-computer" class="form-input" step="0.5" value="1">
+            </div>
+            <div class="form-group" style="margin-bottom:16px;">
+              <label class="form-label">English / Revision</label>
+              <input type="number" id="s-english" class="form-input" step="0.5" value="0.5">
+            </div>
+            <button class="btn btn-primary btn-md" id="save-settings-btn">Save Targets</button>
+          </div>
+
+          <div class="card">
+            <div class="settings-section-title">Data Management</div>
+            <p style="font-size:0.845rem; color:var(--color-text-2); margin-bottom:16px; line-height:1.6;">All your data is stored locally in your browser. Export regularly to back it up.</p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <button class="btn btn-ghost btn-md" id="export-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                Export Data (JSON)
+              </button>
+              <button class="btn btn-ghost btn-md" onclick="document.getElementById('import-file').click()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                Import Data
+              </button>
+              <input type="file" id="import-file" accept=".json" style="display:none;">
+              <div class="divider"></div>
+              <button class="btn btn-danger btn-md" id="reset-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                Reset All Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TIMER MODAL ===================== -->
+<div class="modal-overlay" id="timer-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="timer-modal-title">Track Time</div>
+      <button class="modal-close-btn" onclick="closeModal('timer-modal')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="stopwatch">
+      <div class="stopwatch-time" id="stopwatch-display">00:00:00</div>
+      <div class="stopwatch-sub" id="stopwatch-topic-sub">—</div>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-bottom:16px;">
+      <button class="btn btn-primary btn-md" id="timer-start-btn" style="flex:1;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Start
+      </button>
+      <button class="btn btn-ghost btn-md" id="timer-pause-btn" style="flex:1; display:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>
+        Pause
+      </button>
+      <button class="btn btn-ghost btn-md" id="timer-save-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="font-size:0.8rem; font-weight:700; color:var(--color-text-2); margin-bottom:10px;">✍ Manual Entry</div>
+    <div class="form-row" style="margin-bottom:10px;">
+      <div class="form-group">
+        <label class="form-label">Hours</label>
+        <input type="number" id="manual-h" class="form-input" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Minutes</label>
+        <input type="number" id="manual-m" class="form-input" min="0" max="59" value="0">
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-ghost btn-md" style="flex:1;" id="manual-add-btn">Add Time</button>
+      <button class="btn btn-success btn-md" style="flex:1;" id="mark-complete-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Mark Complete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/data.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/scheduler.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/script.js"></script>
+</body>
 </html>
