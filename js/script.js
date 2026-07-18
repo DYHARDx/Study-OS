@@ -620,11 +620,12 @@ function updateStopwatch() {
 function setupSettingsPage() {
   document.getElementById('save-settings-btn').addEventListener('click', () => {
     const settings = Storage.get(Storage.KEYS.SETTINGS);
-    settings.targets.webdev = parseFloat(document.getElementById('s-webdev').value) || 3;
-    settings.targets.maths = parseFloat(document.getElementById('s-maths').value) || 4;
-    settings.targets.reasoning = parseFloat(document.getElementById('s-reasoning').value) || 1.5;
-    settings.targets.computer = parseFloat(document.getElementById('s-computer').value) || 1;
-    settings.targets.english = parseFloat(document.getElementById('s-english').value) || 0.5;
+    settings.targets.webdev = parseFloat(document.getElementById('s-webdev').value) || 4;
+    const nimcetTarget = parseFloat(document.getElementById('s-nimcet').value) || 3;
+    settings.targets.maths = nimcetTarget;
+    settings.targets.reasoning = 0;
+    settings.targets.computer = 0;
+    settings.targets.english = 0;
     Storage.set(Storage.KEYS.SETTINGS, settings);
     toast('Settings saved!', 'success');
     refreshAll();
@@ -658,10 +659,10 @@ function setupSettingsPage() {
 function loadSettingsValues() {
   const t = Storage.get(Storage.KEYS.SETTINGS).targets;
   setValue('s-webdev', t.webdev);
-  setValue('s-maths', t.maths);
-  setValue('s-reasoning', t.reasoning);
-  setValue('s-computer', t.computer);
-  setValue('s-english', t.english);
+  
+  // Combine all NIMCET targets into one for the display
+  const nimcetTotal = (t.maths || 0) + (t.reasoning || 0) + (t.computer || 0) + (t.english || 0) + (t.revision || 0);
+  setValue('s-nimcet', nimcetTotal);
 }
 
 // ==========================================================

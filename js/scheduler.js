@@ -27,29 +27,43 @@ const Scheduler = {
         // Archive previous day's log
         this.archiveDailyLog(user.lastActiveDate);
 
+        // --- Calculate Carry Forwards for NIMCET Others ---
+        // Note: Planner.getTodayTargets will use the state BEFORE mode changes
+        if (window.Planner) {
+            const yesterdayTargets = Planner.getTodayTargets();
+            const history = Storage.get(Storage.KEYS.HISTORY) || {};
+            const yesterdayLogs = history[user.lastActiveDate] || {categories: {}};
+            
+            user.carryForwards = user.carryForwards || [];
+            ['reasoning', 'computer', 'english'].forEach(cat => {
+                const target = (yesterdayTargets[cat] || 0) * 60;
+                const actual = yesterdayLogs.categories[cat] || 0;
+                if (target > 0 && actual < target * 0.7) {
+                    if (!user.carryForwards.includes(cat)) user.carryForwards.push(cat);
+                } else {
+                    user.carryForwards = user.carryForwards.filter(c => c !== cat);
+                }
+            });
+        }
+
         // Streak Logic
         if (diffDays === 1) {
-            // Check if user actually logged time yesterday (from history)
             const history = Storage.get(Storage.KEYS.HISTORY);
             const yesterdayLog = history[user.lastActiveDate];
-            
-            // If they studied > 0 minutes yesterday, streak ++
             if (yesterdayLog && yesterdayLog.totalMinutes > 0) {
                 user.streak += 1;
                 if (user.streak > user.longestStreak) {
                     user.longestStreak = user.streak;
                 }
             } else {
-                user.streak = 0; // Studied 0 minutes
+                user.streak = 0; 
                 user.missedDays += 1;
             }
         } else {
-            // Missed more than 1 day
             user.streak = 0;
             user.missedDays += (diffDays - 1);
         }
 
-        // Increment day number
         user.currentDayNumber += diffDays;
         user.lastActiveDate = today;
         Storage.set(Storage.KEYS.USER, user);

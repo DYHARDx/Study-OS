@@ -63,6 +63,18 @@ const Analytics = {
       }
     }
 
+    const isZero = data.every(v => v === 0);
+    
+    // Hide the chart completely if there's no data
+    if (canvas.parentElement.classList.contains('chart-box')) {
+      canvas.parentElement.style.display = isZero ? 'none' : 'block';
+    }
+
+    if (isZero) {
+      if (this.charts[canvasId]) { this.charts[canvasId].destroy(); delete this.charts[canvasId]; }
+      return; 
+    }
+
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const textColor = isDark ? '#9BA3C4' : '#4A5577';
     const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(15,22,41,0.05)';
@@ -130,12 +142,22 @@ const Analytics = {
 
     if (this.charts[canvasId]) { this.charts[canvasId].destroy(); }
 
+    const dataValues = Object.values(cats);
+    const isZero = dataValues.every(v => v === 0);
+
+    // If there is no data at all, hide the chart completely to save space
+    if (canvas.parentElement.classList.contains('chart-box')) {
+      canvas.parentElement.style.display = isZero ? 'none' : 'block';
+    }
+
+    if (isZero) return; // Don't even bother rendering an empty chart
+
     this.charts[canvasId] = new Chart(canvas, {
       type: 'doughnut',
       data: {
         labels: ['Web Dev', 'Maths', 'Reasoning', 'Computer', 'English', 'Revision'],
         datasets: [{
-          data: Object.values(cats),
+          data: dataValues,
           backgroundColor: ['#5B5FC7','#10B981','#F59E0B','#EF4444','#8B5CF6','#14B8A6'],
           borderWidth: 0,
           hoverOffset: 4

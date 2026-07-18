@@ -16,11 +16,11 @@ const Storage = {
         theme: 'dark',
         targets: {
             webdev: 3, // Hours
-            maths: 4,
-            reasoning: 1.5,
-            computer: 1,
-            english: 0.5,
-            revision: 2
+            maths: 3,
+            reasoning: 0,
+            computer: 0,
+            english: 0,
+            revision: 1
         }
     },
 
@@ -30,7 +30,8 @@ const Storage = {
         totalStudyHours: 0,
         currentDayNumber: 1,
         longestStreak: 0,
-        missedDays: 0
+        missedDays: 0,
+        carryForwards: []
     },
 
     // Get Data

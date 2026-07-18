@@ -8,18 +8,40 @@ const Planner = {
 
     getTodayTargets() {
         const settings = Storage.get(Storage.KEYS.SETTINGS);
-        let targets = { ...settings.targets };
+        let targets = { ...settings.targets }; 
+        const user = Storage.get(Storage.KEYS.USER) || Storage.DEFAULT_USER;
 
-        if (this.isInternshipDay()) {
-            const INTERNSHIP_MAX = 5;
-            let totalDefaultHours = Object.values(targets).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-            if (totalDefaultHours > INTERNSHIP_MAX) {
-                const scaleFactor = INTERNSHIP_MAX / totalDefaultHours;
-                for (const cat in targets) {
-                    targets[cat] = +(parseFloat(targets[cat] || 0) * scaleFactor).toFixed(2);
-                }
+        // Reset NIMCET Cats
+        const nimcetCats = ['maths', 'reasoning', 'computer', 'english'];
+        nimcetCats.forEach(c => targets[c] = 0);
+
+        // Advanced 3+3+1 Logic
+        targets.maths = 3;
+        
+        let pendingCount = 0;
+        const pendingQueue = user.carryForwards || [];
+        
+        ['reasoning', 'computer', 'english'].forEach(cat => {
+            if (pendingQueue.includes(cat)) {
+                targets[cat] = 1;
+                pendingCount++;
             }
+        });
+        
+        // Maths priority rule: Maths only appears if 0 or 1 subject is pending
+        if (pendingCount >= 2) {
+            targets.maths = 0;
+        } else if (pendingCount === 1) {
+            targets.maths = 2;
+        } else {
+            targets.maths = 3;
         }
+
+        // Internship Day Override
+        if (this.isInternshipDay()) {
+            targets.webdev = 0;
+        }
+
         return targets;
     },
 
@@ -39,6 +61,18 @@ const Planner = {
                 syllabus[category][index + 1].status = 'unlocked';
             }
             Storage.set(Storage.KEYS.SYLLABUS, syllabus);
+        }
+        
+        // Add Reasoning, Computer, English to Pending Queue when Maths chapter finishes
+        if (category === 'maths') {
+            const user = Storage.get(Storage.KEYS.USER) || Storage.DEFAULT_USER;
+            user.carryForwards = user.carryForwards || [];
+            ['reasoning', 'computer', 'english'].forEach(cat => {
+                if (!user.carryForwards.includes(cat)) {
+                    user.carryForwards.push(cat);
+                }
+            });
+            Storage.set(Storage.KEYS.USER, user);
         }
     },
 
@@ -97,8 +131,10 @@ const Planner = {
             if (!topic) return;
 
             const targetMins = Math.round(parseFloat(targets[cat] || 0) * 60);
+            if (targetMins <= 0) return; // Skip subjects with 0 target
+
             const spentMins = completed[cat] || 0;
-            const isCompleted = targetMins > 0 && spentMins >= targetMins;
+            const isCompleted = spentMins >= targetMins;
             const isCarryForward = this._wasCarryForward(cat);
 
             const task = {
